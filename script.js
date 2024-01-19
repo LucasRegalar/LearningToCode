@@ -3,8 +3,7 @@ const checkButton = document.getElementById("check-btn");
 const result = document.getElementById("result");
 const shadow = document.querySelector("form");
 
-
-
+console.log("git-hub test 1");
 
 function checkInputValue(event) {
 
