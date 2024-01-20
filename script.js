@@ -3,51 +3,74 @@ const checkButton = document.getElementById("check-btn");
 const result = document.getElementById("result");
 const shadow = document.querySelector("form");
 
-console.log("git-hub test 1");
 
-function checkInputValue(event) {
+//Wrapper Function
+function startPalindromChecker(event) {
+    event.preventDefault();                                     //Prevent Refreshing
+    const input = textInput.value;
 
-    event.preventDefault();
-
-    if (textInput.value.length === 0) {
-        console.log("Please input a value");
-        alert("Please input a value");
-    } else {
-        checkForPalindrome();
+    if (! validateInput(input)) {
+        alert("Please input a value");                          //Validation
+        return;
     }
+
+    const cleanedInput = cleanTextInput(input);                 //Cleaning 
+
+
+    returnResult(checkingPalindrome(cleanedInput), input);      //Checking + Result
+}
+
+//Validation
+function validateInput(input) {
+    if (input.length === 0) {
+        return false;
+    }
+
+    return true;
 }
 
 
+//Cleaning
+function cleanTextInput(input) {
+    let cleanString = input.replace(/_/g, "-").toLowerCase();
 
+    cleanString = cleanString.replace(/\W/g, "");
 
-function checkForPalindrome() {
+    return cleanString;
+}
+
+//Checking
+function checkingPalindrome(input) {
+    const inputArray = input.split("");
+    const inputArrayReverse = input.split("").toReversed();
     
-    const cleanTextInput = textInput.value.replace(/_/g, "-").toLowerCase();
-    console.log(cleanTextInput);
-    const cleanTextInput2 = cleanTextInput.replace(/\W/g, "");
-    console.log(cleanTextInput2);
-    
-    const inputArray = cleanTextInput2.split("");
-    const inputArrayReverse = inputArray.toReversed();
-
-    console.log(inputArray);
+    console.log(inputArray); //Just for testing
     console.log(inputArrayReverse);
-
-    result.classList.remove("hidden");
 
     if (
         inputArray.length === inputArrayReverse.length &&
         inputArray.every((val, index) => val === inputArrayReverse[index])) {
-        result.innerHTML = (`${textInput.value.bold()} is a palindrome.`);
-        shadow.classList.remove("shadow_red");
-        shadow.classList.add("shadow_green");
-
-    } else {
-        result.innerHTML = (`${textInput.value.bold()} is not a palindrome.`);
-        shadow.classList.remove("shadow_green");
-        shadow.classList.add("shadow_red");
-    }
+            return true;
+        } 
+        return false;
 }
 
 
-checkButton.addEventListener("click", checkInputValue);
+//Result
+function returnResult(boolean, input) {
+    result.classList.remove("hidden");
+   
+    if (boolean) {
+        result.innerHTML = (`${input.bold()} is a palindrome.`);
+        shadow.classList.remove("shadow_red");
+        shadow.classList.add("shadow_green");
+        return;
+    } else {
+        result.innerHTML = (`${input.bold()} is not a palindrome.`);
+        shadow.classList.remove("shadow_green");
+        shadow.classList.add("shadow_red");
+        return;
+    }
+}
+
+checkButton.addEventListener("click", startPalindromChecker);
